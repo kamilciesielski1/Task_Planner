@@ -24,6 +24,7 @@ class User extends BaseUser
         parent::__construct();
         $this->roles = array('ROLE_USER');
         $this->categories = new ArrayCollection();
+        $this->tasks = new ArrayCollection();
     }
     /**
      * @ORM\OneToMany(targetEntity="Category", mappedBy="user")
@@ -66,5 +67,38 @@ class User extends BaseUser
     public function getCategories()
     {
         return $this->categories;
+    }
+
+    /**
+     * Add tasks
+     *
+     * @param \TaskPlannerBundle\Entity\Task $tasks
+     * @return User
+     */
+    public function addTask(\TaskPlannerBundle\Entity\Task $tasks)
+    {
+        $this->tasks[] = $tasks;
+
+        return $this;
+    }
+
+    /**
+     * Remove tasks
+     *
+     * @param \TaskPlannerBundle\Entity\Task $tasks
+     */
+    public function removeTask(\TaskPlannerBundle\Entity\Task $tasks)
+    {
+        $this->tasks->removeElement($tasks);
+    }
+
+    /**
+     * Get tasks
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTasks()
+    {
+        return $this->tasks;
     }
 }

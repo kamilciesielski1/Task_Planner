@@ -37,9 +37,9 @@ class Task
     private $description;
 
     /**
-     * @var \DateTime
+     * @var \Date
      *
-     * @ORM\Column(name="deadLine", type="datetime")
+     * @ORM\Column(name="deadLine", type="date")
      */
     private $deadLine;
     /**

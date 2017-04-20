@@ -38,7 +38,7 @@ class CategoryController extends Controller
             
             $request->getSession()
             ->getFlashBag()
-            ->add('success', 'Dodano!');
+            ->add('success', 'Category added!');
             
             $category = $form->getData();
             

@@ -11,7 +11,7 @@ use TaskPlannerBundle\Entity\Category;
 use TaskPlannerBundle\Entity\Task;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
-
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 /**
  * User controller.
  *
@@ -65,7 +65,9 @@ class UserController extends Controller
                 ))
                 ->add('name', 'text')
                 ->add('description', 'text')
-                ->add('deadLine', 'datetime', array('years'=>range(2017,2025)))
+                ->add('deadLine', DateType::class, array(
+                'widget' => 'single_text',
+                ))
                 ->add('save', 'submit', array('label'=>'Save Task'))
                 ->getForm();
         
@@ -74,7 +76,7 @@ class UserController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         
-        $tasks = $em->getRepository('TaskPlannerBundle:Task')->findAllByTaskId($id);
+        $tasks = $em->getRepository('TaskPlannerBundle:Task')->findAllByUserIdOrderTask($id);
         
         
         return $this->render('TaskPlannerBundle:User:show.html.twig', 

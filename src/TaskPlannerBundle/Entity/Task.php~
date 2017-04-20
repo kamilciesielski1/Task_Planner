@@ -37,9 +37,9 @@ class Task
     private $description;
 
     /**
-     * @var \DateTime
+     * @var \Date
      *
-     * @ORM\Column(name="deadLine", type="datetime")
+     * @ORM\Column(name="deadLine", type="date")
      */
     private $deadLine;
     /**
@@ -223,5 +223,28 @@ class Task
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \TaskPlannerBundle\Entity\User $user
+     * @return Task
+     */
+    public function setUser(\TaskPlannerBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \TaskPlannerBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

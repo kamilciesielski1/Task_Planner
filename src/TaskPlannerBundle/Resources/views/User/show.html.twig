@@ -13,7 +13,7 @@
         <li><a href="{{ url('taskList')}}">YOUR TASKS</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Link</a></li>
+        <li><a href="/logout">Logout</a></li>
       </ul>
     </div>
   </div>
@@ -67,7 +67,7 @@
             {% endfor %}
         </div>
     {% endif %}
-<h2><a href="{{ url('taskList')}}">Task List:</a></h2>
+<h2><a href="{{ url('taskList')}}">All Tasks:</a></h2>
 
 <table class="table table-striped">
     <tr>
@@ -80,11 +80,11 @@
 {% for task in tasks %}
 
         <tr>
-        <td>{{ task.id }}</td>
+        <td>{{ loop.index }}</td>
         <td>{{ task.name }}</td>
         <td>{{ task.description | length > 50 ? task.description | slice(0,50)~'...':task.description}}</td>
         <td>{{ task.category.name}}</td>
-        <td>{{ task.deadLine.date | date('Y-m-d H:i')}}</td>
+        <td>{{ task.deadLine.date | date('Y-m-d')}}</td>
         </tr>
 
 {% endfor %}

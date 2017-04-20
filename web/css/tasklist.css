@@ -1,0 +1,27 @@
+body {
+    padding-top: 50px;
+}
+.table1 {
+    flex-shrink: 1;
+    margin: 20px;
+    width: auto;
+
+}
+.table2 {
+    flex-shrink: 1;
+    margin: 20px;
+    width: auto;
+}
+.tables {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+}
+.containLast{
+    display: flex;
+    justify-content: center;
+}
+.last{
+    width: 50%;
+    
+}

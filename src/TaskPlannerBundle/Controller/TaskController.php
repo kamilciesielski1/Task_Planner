@@ -7,7 +7,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use TaskPlannerBundle\Entity\Task;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
+
+/**
+ * @Security("has_role('ROLE_USER')")
+ */
 class TaskController extends Controller
 {
     /**
@@ -35,7 +41,9 @@ class TaskController extends Controller
                 ))
                 ->add('name', 'text')
                 ->add('description', 'text')
-                ->add('deadLine', 'datetime', array('years'=>range(2017,2025)))
+                ->add('deadLine', DateType::class, array(
+                'widget' => 'single_text',
+                ))
                 ->add('save', 'submit', array('label'=>'Save Task'))
                 ->getForm();
         
@@ -45,7 +53,7 @@ class TaskController extends Controller
             
             $request->getSession()
             ->getFlashBag()
-            ->add('success', 'Dodano!');
+            ->add('success', 'Task added!');
             
             $task = $formtask->getData();
             
@@ -73,23 +81,36 @@ class TaskController extends Controller
         
         $em = $this->getDoctrine()->getManager();
         
-        $tasks = $em->getRepository('TaskPlannerBundle:Task')->findAllByUserId($id);
+        $tasks = $em->getRepository('TaskPlannerBundle:Task')->findAllByOutOfDate($id);
         
-        //$tasks = $user1->getTasks();
+        $tasksByDate = $em->getRepository('TaskPlannerBundle:Task')->findAllbyDate($id);
+        
+        $tasksByStatus = $em->getRepository('TaskPlannerBundle:Task')->findAllbyStatus($id);
         
         return $this->render('TaskPlannerBundle:Task:TaskList.html.twig', array(
-            'tasks'=>$tasks
+            'tasks'=>$tasks, 'taskDate'=>$tasksByDate, 'taskStatus'=>$tasksByStatus
         ));
     }        
 
     /**
-     * @Route("/deleteTask")
+     * @Route("/{id}/deleteTask", name="deleteTask")
      */
-    public function deleteTaskAction()
+    public function deleteTaskAction($id)
     {
-        return $this->render('TaskPlannerBundle:Task:delete_task.html.twig', array(
-            // ...
-        ));
+        $user1 = $this->get('security.token_storage')->getToken()->getUser();
+        $id2 = $user1->getId();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $qb = $em->createQueryBuilder();
+        $query = $qb->delete('TaskPlannerBundle:Task', 'task')
+            ->where('task.id = :id', 'task.user = :id2')
+            ->setParameter('id', $id)
+            ->setParameter('id2', $id2)
+            ->getQuery();
+        $query->execute();
+        
+        return $this->redirectToRoute('taskList');
     }
 
     /**
@@ -101,5 +122,34 @@ class TaskController extends Controller
             // ...
         ));
     }
+    
+    /**
+     * @Route("/{id}/changeStatus", name="changeStatus")
+     */
+    public function changeStatusAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $repository = $this->getDoctrine()->getRepository('TaskPlannerBundle:Task');
+        
+        $task = $repository->find($id);
+        
+        if ($task)
+        {
+            if ($task->getStatus() == 0)
+            {
+                $task->setStatus(1);
+                
+            } 
+            else if ($task->getStatus() == 1)
+            {
+                $task->setStatus(0);
+            }
+            $em->flush();
+        }
+        
+        return $this->redirectToRoute('taskList');
+    }
+                
 
 }
