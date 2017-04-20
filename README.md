@@ -1,4 +1,4 @@
-Task_Planner_project
+Task_Planner
 ====================
 
-A Symfony project created on April 11, 2017, 10:47 pm.
+Symfony2 Task Planner is made to organise Users Tasks. 
