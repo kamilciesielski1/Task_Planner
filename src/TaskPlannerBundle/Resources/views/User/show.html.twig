@@ -10,7 +10,7 @@
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="{{ url('taskList')}}">YOUR TASKS</a></li>
+        <li><a class="btn btn-lg btn-success" href="{{ url('taskList')}}" >YOUR TASKS</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="/logout">Logout</a></li>
@@ -18,16 +18,45 @@
     </div>
   </div>
 </nav>
+<div class="forms">
+            
+    <div class="form1">  
+    {{ form_start(form) }}
+        <div class="form-signin">    
+            <h4>Add new Category:</h4>
+            <div >
+                {{ form_widget(form.name, {'attr':{'class':'form-control', 'placeholder':'Category Name'}}) }} 
+            </div>
+                {{ form_widget(form.save, {'attr':{'class':'btn btn-lg btn-primary btn-block'}}) }}
+        </div>
+    {{ form_end(form)}}
+    </div>
     
-{{ form_start(form) }}
-    <div class="form-signin">    
-        <h4>Add new Category:</h4>
-        <div >
-            {{ form_widget(form.name, {'attr':{'class':'form-control', 'placeholder':'Category Name'}}) }} 
+    <div class="form2"> 
+    {{ form_start(formtask) }}
+        <div class="form-signin">  
+            <h4>Add new Task:</h4>
+            <div >
+                <label for="category">Category(required):</label>
+                {{ form_widget(formtask.category, {'attr':{'class':'form-control'}}) }} 
+            </div>
+            <div >
+                <label for="name">Name Your Task:</label>
+                {{ form_widget(formtask.name, {'attr':{'class':'form-control', 'placeholder':'Task Name'}}) }} 
+            </div>
+            <div >
+                {{ form_label(formtask.description) }}
+                {{ form_widget(formtask.description, {'attr':{'class':'form-control', 'placeholder':'Task Description'}}) }} 
+            </div>
+            <div>
+                {{ form_label(formtask.deadLine) }}
+                {{ form_widget(formtask.deadLine, {'attr':{'class':'form-control'}}) }} 
+            </div>
+                {{ form_widget(formtask.save, {'attr':{'class':'btn btn-lg btn-primary btn-block'}}) }}
         </div>
-            {{ form_widget(form.save, {'attr':{'class':'btn btn-lg btn-primary btn-block'}}) }}
+    {{ form_end(form)}}
     </div>
-{{ form_end(form)}}
+</div>
     {% if app.session.flashBag.has('success') %}
         <div class="alert alert-success">
             {% for msg in app.session.flashBag.get('success') %}
@@ -35,59 +64,29 @@
             {% endfor %}
         </div>
     {% endif %}
+    <h2><a id="a" href="{{ url('taskList')}}">All Tasks:</a></h2>
+<div class="table1">
+    
 
-<hr>
-
-{{ form_start(formtask) }}
-    <div class="form-signin">  
-        <h4>Add new Task:</h4>
-        <div >
-            <label for="category">Category(required):</label>
-            {{ form_widget(formtask.category, {'attr':{'class':'form-control'}}) }} 
-        </div>
-        <div >
-            <label for="name">Name Your Task:</label>
-            {{ form_widget(formtask.name, {'attr':{'class':'form-control', 'placeholder':'Task Name'}}) }} 
-        </div>
-        <div >
-            {{ form_label(formtask.description) }}
-            {{ form_widget(formtask.description, {'attr':{'class':'form-control', 'placeholder':'Task Description'}}) }} 
-        </div>
-        <div>
-            {{ form_label(formtask.deadLine) }}
-            {{ form_widget(formtask.deadLine, {'attr':{'class':'form-control'}}) }} 
-        </div>
-            {{ form_widget(formtask.save, {'attr':{'class':'btn btn-lg btn-primary btn-block'}}) }}
-    </div>
-{{ form_end(form)}}
-    {% if app.session.flashBag.has('success') %}
-        <div class="alert alert-success">
-            {% for msg in app.session.flashBag.get('success') %}
-                {{ msg }}
-            {% endfor %}
-        </div>
-    {% endif %}
-<h2><a href="{{ url('taskList')}}">All Tasks:</a></h2>
-
-<table class="table table-striped">
-    <tr>
-        <th>Number:</th>
-        <th>Name:</th>
-        <th>Description:</th>
-        <th>Category:</th>
-        <th>Dead Line:</th>
-    </tr>
-{% for task in tasks %}
-
+    <table class="table table-striped">
         <tr>
-        <td>{{ loop.index }}</td>
-        <td>{{ task.name }}</td>
-        <td>{{ task.description | length > 50 ? task.description | slice(0,50)~'...':task.description}}</td>
-        <td>{{ task.category.name}}</td>
-        <td>{{ task.deadLine.date | date('Y-m-d')}}</td>
+            <th>Number:</th>
+            <th>Name:</th>
+            <th>Description:</th>
+            <th>Category:</th>
+            <th>Dead Line:</th>
         </tr>
+    {% for task in tasks %}
 
-{% endfor %}
-</table> 
+            <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ task.name }}</td>
+            <td>{{ task.description | length > 50 ? task.description | slice(0,50)~'...':task.description}}</td>
+            <td>{{ task.category.name}}</td>
+            <td>{{ task.deadLine.date | date('Y-m-d')}}</td>
+            </tr>
 
+    {% endfor %}
+    </table> 
+</div>
 {% endblock %}

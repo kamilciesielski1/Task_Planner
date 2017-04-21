@@ -9,6 +9,7 @@ use TaskPlannerBundle\Entity\Task;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 
 /**
@@ -18,6 +19,7 @@ class TaskController extends Controller
 {
     /**
      * @Route("/newTask", name="newTask")
+     * @Method({"POST"})
      */
     public function newTaskAction(Request $request)
     {
@@ -115,14 +117,60 @@ class TaskController extends Controller
 
     /**
      * @Route("/{id}/showTask", name="showTask")
+     * @Method({"GET", "POST"})
      */
-    public function editTaskAction()
+    public function editTaskAction(Request $request, $id)
     {
-        return $this->render('TaskPlannerBundle:Task:edit_task.html.twig', array(
-            // ...
-        ));
+        $task = $this->getDoctrine()->getRepository('TaskPlannerBundle:Task')->find($id);
+        
+        
+        $form = $this->createFormBuilder($task)
+                ->setAction($this->generateUrl('showTask', ['id'=>$id]))
+                ->setMethod('POST')
+                ->add('category', EntityType::class, array(
+                    'class'=>'TaskPlannerBundle:Category',
+                    'choice_label'=>'name',
+                    'placeholder'=>'Select Category...',
+                    'query_builder' => function ($er) {
+                    $user1 = $this->get('security.token_storage')->getToken()->getUser();
+                    $qb = $er->createQueryBuilder('u');
+                    return $qb->select('u')
+                    ->where('u.user = :identifier')
+                    ->orderBy('u.name', 'ASC')
+                    ->setParameter('identifier', $user1);
+                    }
+                ))
+                ->add('name', 'text')
+                ->add('description', 'text')
+                ->add('deadLine', DateType::class, array(
+                'widget' => 'single_text',
+                ))
+                ->add('save', 'submit', array('label'=>'Commit changes!'))
+                ->getForm();
+                            
+        if ($request->isMethod('GET'))
+        {
+                return $this->render('TaskPlannerBundle:Task:edit_task.html.twig', array(
+                'form'=>$form->createView()
+                ));
+        } 
+        else if ($request->isMethod('POST'))
+        {
+            $form->handleRequest($request);
+            
+            
+            if ($form->isSubmitted()) 
+            {
+                $this->getDoctrine()->getManager()->flush();
+                
+                $request->getSession()
+                ->getFlashBag()
+                ->add('success', 'Changes commited!');
+            }
+            return $this->redirectToRoute('taskList');
+        }
+             
     }
-    
     /**
      * @Route("/{id}/changeStatus", name="changeStatus")
      */
@@ -141,10 +189,7 @@ class TaskController extends Controller
                 $task->setStatus(1);
                 
             } 
-            else if ($task->getStatus() == 1)
-            {
-                $task->setStatus(0);
-            }
+            
             $em->flush();
         }
         

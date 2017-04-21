@@ -1,0 +1,11 @@
+body {
+    padding-top: 50px;
+}
+.form1 {
+    display: flex;
+    justify-content: center;
+   
+}
+.form2 {
+    width: 400px;
+}

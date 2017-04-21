@@ -1,7 +1,47 @@
-{% extends "::base.html.twig" %}
+{% extends "TaskPlannerBundle::taskbase.html.twig" %}
 
 {% block title %}TaskPlannerBundle:Task:editTask{% endblock %}
-
+{% block stylesheets %}<link rel="stylesheet" href="{{ asset('css/editTask.css')}}">{% endblock %}
 {% block body %}
-<h1>Welcome to the Task:editTask page</h1>
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="{{ url('user_index')}}">Task Planner</a>
+    </div>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a class="btn btn-lg btn-success" href="{{ url('taskList')}}" >YOUR TASKS</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="form1">
+    <div class="form2">
+    {{ form_start(form) }}
+        <div class="form-signin">  
+            <h4>Edit Task:</h4>
+            <div >
+                <label for="category">Category(required):</label>
+                {{ form_widget(form.category, {'attr':{'class':'form-control'}}) }} 
+            </div>
+            <div >
+                <label for="name">Name Your Task:</label>
+                {{ form_widget(form.name, {'attr':{'class':'form-control', 'placeholder':'Task Name'}}) }} 
+            </div>
+            <div >
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description, {'attr':{'class':'form-control', 'placeholder':'Task Description'}}) }} 
+            </div>
+            <div>
+                {{ form_label(form.deadLine) }}
+                {{ form_widget(form.deadLine, {'attr':{'class':'form-control'}}) }} 
+            </div>
+                {{ form_widget(form.save, {'attr':{'class':'btn btn-lg btn-primary btn-block'}}) }}
+        </div>
+    {{ form_end(form)}}
+    </div>
+</div>
 {% endblock %}

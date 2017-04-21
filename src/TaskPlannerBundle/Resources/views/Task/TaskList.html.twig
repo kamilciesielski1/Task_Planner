@@ -10,7 +10,7 @@
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="{{ url('main')}}">Add Tasks/Categories</a></li>
+        <li><a  class="btn btn-lg btn-success" href="{{ url('main')}}">Add Tasks/Categories</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="/logout">Logout</a></li>
@@ -45,6 +45,13 @@
 
         {% endfor %}
         </table>
+        {% if app.session.flashBag.has('success') %}
+            <div class="alert alert-success">
+                {% for msg in app.session.flashBag.get('success') %}
+                    {{ msg }}
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
     <div class="table2">
         <h2>Tasks Completed:</h2>
