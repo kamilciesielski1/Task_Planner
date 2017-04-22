@@ -10,10 +10,11 @@
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a  class="btn btn-lg btn-success" href="{{ url('main')}}">Add Tasks/Categories</a></li>
+        <li><a  class="btn btn-default" href="{{ url('main')}}">Add Tasks and Categories</a></li>
+        <li><a  class="btn btn-default" href="{{ url('editCat')}}">Category Manager</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="/logout">Logout</a></li>
+        <li><a class="btn btn-default" href="/logout">Logout</a></li>
       </ul>
     </div>
   </div>
@@ -22,25 +23,27 @@
     <div class="table1">
         <h2>Tasks To Do:</h2>
 
-        <table class="table table-striped">
+        <table class="table table-hover table-bordered">
             <tr>
-                <th>Number:</th>
-                <th>Name:<br>(click to edit)</th>
+                <th>Id:</th>
+                <th>Name:</th>
                 <th>Description:</th>
                 <th>Category:</th>
-                <th>Dead Line:<span class="glyphicon glyphicon-triangle-top"></span></th>
+                <th>Task End Date:<span class="glyphicon glyphicon-triangle-top"></span></th>
+                <th>Edit</th>
                 <th>Status</th>
                 <th>Delete</th>
             </tr>
         {% for task in taskDate %}
-            <tr class="warning">
+            <tr class="bg-info">
                 <td>{{ loop.index }}</td>
-                <td><a href="{{ url('showTask', {'id':task.id})}}">{{ task.name }}</a></td>
+                <td><strong>{{ task.name }}</strong></td>
                 <td>{{ task.description | length > 50 ? task.description | slice(0,50)~'...':task.description}}</td>
                 <td>{{ task.category.name}}</td>
-                <td>{{ task.deadLine.date | date('Y-m-d')}}</td>
-                <td><a href="{{ url('changeStatus', {'id':task.id})}}">Done!</a></td>
-                <td><a href="{{ url('deleteTask', {'id':task.id})}}">Delete</a></td>
+                <td><span class="date">{{ task.deadLine.date | date('Y-m-d')}}</span></td>
+                <td><a class="btn btn-default" href="{{ url('showTask', {'id':task.id})}}">Edit</a></td>
+                <td><a class="btn btn-default" href="{{ url('changeStatus', {'id':task.id})}}">Done!</a></td>
+                <td><a class="btn btn-default" href="{{ url('deleteTask', {'id':task.id})}}">Delete</a></td>
             </tr>
 
         {% endfor %}
@@ -56,23 +59,23 @@
     <div class="table2">
         <h2>Tasks Completed:</h2>
 
-        <table class="table table-striped">
+        <table class="table table-hover table-bordered">
             <tr>
-                <th>Number:</th>
+                <th>Id:</th>
                 <th>Name:</th>
                 <th>Description:</th>
                 <th>Category:</th>
-                <th>Dead Line:<span class="glyphicon glyphicon-triangle-top"></span></th>
+                <th>Task End Date:<span class="glyphicon glyphicon-triangle-top"></span></th>
                 <th>Delete</th>
             </tr>
         {% for task in taskStatus %}
-            <tr class="success">
+            <tr class="bg-success">
                 <td>{{ loop.index }}</td>
-                <td>{{ task.name }}</td>
+                <td><strong>{{ task.name }}</strong></td>
                 <td>{{ task.description | length > 50 ? task.description | slice(0,50)~'...':task.description}}</td>
                 <td>{{ task.category.name}}</td>
-                <td>{{ task.deadLine.date | date('Y-m-d')}}</td>
-                <td><a href="{{ url('deleteTask', {'id':task.id})}}">Delete</a></td>
+                <td><span class="date">{{ task.deadLine.date | date('Y-m-d')}}</span></td>
+                <td><a class="btn btn-default" href="{{ url('deleteTask', {'id':task.id})}}">Delete</a></td>
             </tr>
 
         {% endfor %}
@@ -82,23 +85,25 @@
 <div class="containLast">
     <div class="last">
         <h2>Tasks Not Completed in Time:</h2>
-        <table class="table table-striped">
+        <table class="table table-hover table-bordered">
             <tr>
-                <th>Number:</th>
+                <th>Id:</th>
                 <th>Name:</th>
                 <th>Description:</th>
                 <th>Category:</th>
-                <th>Dead Line:<span class="glyphicon glyphicon-triangle-top"></span></th>
+                <th>Task End Date:<span class="glyphicon glyphicon-triangle-top"></span></th>
+                <th>Edit</th>
                 <th>Delete</th>
             </tr>
         {% for task in tasks %}
-            <tr class="danger">
+            <tr class="bg-danger">
                 <td>{{ loop.index }}</td>
-                <td><a href="{{ url('showTask', {'id':task.id})}}">{{ task.name }}</a></td>
+                <td><strong>{{ task.name }}</strong></a></td>
                 <td>{{ task.description | length > 50 ? task.description | slice(0,50)~'...':task.description}}</td>
                 <td>{{ task.category.name}}</td>
-                <td>{{ task.deadLine.date | date('Y-m-d')}}</td>
-                <td><a href="{{ url('deleteTask', {'id':task.id})}}">Delete</a></td>
+                <td><span class="date">{{ task.deadLine.date | date('Y-m-d')}}</span></td>
+                <td><a class="btn btn-default" href="{{ url('showTask', {'id':task.id})}}">Edit</a></td>
+                <td><a class="btn btn-default" href="{{ url('deleteTask', {'id':task.id})}}">Delete</a></td>
             </tr>
 
         {% endfor %}

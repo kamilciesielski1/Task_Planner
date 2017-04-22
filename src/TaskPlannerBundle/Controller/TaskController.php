@@ -42,7 +42,7 @@ class TaskController extends Controller
                     }
                 ))
                 ->add('name', 'text')
-                ->add('description', 'text')
+                ->add('description', 'textarea')
                 ->add('deadLine', DateType::class, array(
                 'widget' => 'single_text',
                 ))
@@ -97,7 +97,7 @@ class TaskController extends Controller
     /**
      * @Route("/{id}/deleteTask", name="deleteTask")
      */
-    public function deleteTaskAction($id)
+    public function deleteTaskAction(Request $request, $id)
     {
         $user1 = $this->get('security.token_storage')->getToken()->getUser();
         $id2 = $user1->getId();
@@ -111,7 +111,9 @@ class TaskController extends Controller
             ->setParameter('id2', $id2)
             ->getQuery();
         $query->execute();
-        
+        $request->getSession()
+                ->getFlashBag()
+                ->add('success', 'Task Deleted!');
         return $this->redirectToRoute('taskList');
     }
 
@@ -141,7 +143,7 @@ class TaskController extends Controller
                     }
                 ))
                 ->add('name', 'text')
-                ->add('description', 'text')
+                ->add('description', 'textarea')
                 ->add('deadLine', DateType::class, array(
                 'widget' => 'single_text',
                 ))

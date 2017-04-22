@@ -10,7 +10,7 @@
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a class="btn btn-lg btn-success" href="{{ url('taskList')}}" >YOUR TASKS</a></li>
+        <li><a class="btn btn-default" href="{{ url('taskList')}}" >YOUR TASKS</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="/logout">Logout</a></li>
@@ -36,7 +36,7 @@
                 {{ form_widget(form.description, {'attr':{'class':'form-control', 'placeholder':'Task Description'}}) }} 
             </div>
             <div>
-                {{ form_label(form.deadLine) }}
+                <label for="name">Task End Date:</label>
                 {{ form_widget(form.deadLine, {'attr':{'class':'form-control'}}) }} 
             </div>
                 {{ form_widget(form.save, {'attr':{'class':'btn btn-lg btn-primary btn-block'}}) }}

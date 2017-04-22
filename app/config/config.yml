@@ -71,5 +71,6 @@ fos_user:
     firewall_name: main
     user_class: TaskPlannerBundle\Entity\User
     from_email:
-        address: 'kamil.ciesielski1@gmail.com'
-        sender_name: 'task'
+        address: 'noreply@example.com'
+        sender_name: 'TaskPlanner'
+    

@@ -64,7 +64,7 @@ class UserController extends Controller
                     }
                 ))
                 ->add('name', 'text')
-                ->add('description', 'text')
+                ->add('description', 'textarea')
                 ->add('deadLine', DateType::class, array(
                 'widget' => 'single_text',
                 ))
