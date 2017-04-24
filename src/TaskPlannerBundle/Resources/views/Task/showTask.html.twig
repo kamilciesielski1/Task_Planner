@@ -1,6 +1,6 @@
 {% extends "TaskPlannerBundle::taskbase.html.twig" %}
 
-{% block title %}TaskPlannerBundle:Task:editTask{% endblock %}
+{% block title %}TaskPlannerBundle:Task:showTask{% endblock %}
 {% block stylesheets %}<link rel="stylesheet" href="{{ asset('css/editTask.css')}}">{% endblock %}
 {% block body %}
 <nav class="navbar navbar-default navbar-fixed-top">
@@ -39,7 +39,7 @@
                 <label for="name">Task End Date:</label>
                 {{ form_widget(form.deadLine, {'attr':{'class':'form-control'}}) }} 
             </div>
-                {{ form_widget(form.save, {'attr':{'class':'btn btn-lg btn-primary btn-block'}}) }}
+
         </div>
     {{ form_end(form)}}
     </div>

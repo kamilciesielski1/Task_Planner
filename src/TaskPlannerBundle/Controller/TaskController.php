@@ -118,7 +118,7 @@ class TaskController extends Controller
     }
 
     /**
-     * @Route("/{id}/showTask", name="showTask")
+     * @Route("/{id}/editTask", name="editTask")
      * @Method({"GET", "POST"})
      */
     public function editTaskAction(Request $request, $id)
@@ -127,7 +127,7 @@ class TaskController extends Controller
         
         
         $form = $this->createFormBuilder($task)
-                ->setAction($this->generateUrl('showTask', ['id'=>$id]))
+                ->setAction($this->generateUrl('editTask', ['id'=>$id]))
                 ->setMethod('POST')
                 ->add('category', EntityType::class, array(
                     'class'=>'TaskPlannerBundle:Category',
@@ -145,7 +145,7 @@ class TaskController extends Controller
                 ->add('name', 'text')
                 ->add('description', 'textarea')
                 ->add('deadLine', DateType::class, array(
-                'widget' => 'single_text',
+                'widget' => 'single_text'                
                 ))
                 ->add('save', 'submit', array('label'=>'Commit changes!'))
                 ->getForm();
@@ -197,6 +197,41 @@ class TaskController extends Controller
         
         return $this->redirectToRoute('taskList');
     }
+    /**
+     * @Route("/{id}/showTask", name="showTask")
+     */ 
+    public function showTaskAction($id)
+    {
+    $task = $this->getDoctrine()->getRepository('TaskPlannerBundle:Task')->find($id);
+        
+        
+        $form = $this->createFormBuilder($task)
+                ->setAction($this->generateUrl('showTask', ['id'=>$id]))
+                ->setMethod('POST')
+                ->add('category', EntityType::class, array(
+                    'attr'=>array('readonly'=>'true'),
+                    'class'=>'TaskPlannerBundle:Category',
+                    'choice_label'=>'name',
+                    'placeholder'=>'Select Category...',
+                    'query_builder' => function ($er) {
+                    $user1 = $this->get('security.token_storage')->getToken()->getUser();
+                    $qb = $er->createQueryBuilder('u');
+                    return $qb->select('u')
+                    ->where('u.user = :identifier')
+                    ->orderBy('u.name', 'ASC')
+                    ->setParameter('identifier', $user1);
+                    }
+                ))
+                ->add('name', 'text', array('attr'=>array('readonly'=>'true')))
+                ->add('description', 'textarea', array('attr'=>array('readonly'=>'true')))
+                ->add('deadLine', DateType::class, array(
+                    'attr'=>array('readonly'=>'true'),
+                    'widget' => 'single_text'                
+                    ))
+                ->getForm();
                 
-
+        return $this->render('TaskPlannerBundle:Task:showTask.html.twig', array(
+                'form'=>$form->createView()
+                ));
+    }
 }

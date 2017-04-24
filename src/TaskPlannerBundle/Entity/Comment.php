@@ -29,12 +29,6 @@ class Comment
     private $text;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="sendTime", type="datetime")
-     */
-    private $sendTime;
-    /**
      * @ORM\ManyToOne(targetEntity="Task", inversedBy="comments")
      * @ORM\JoinColumn(name="task_id", referencedColumnName="id")
      */

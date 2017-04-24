@@ -6,19 +6,20 @@ body {
     white-space: nowrap;
 }
 .table1 {
-    
     flex-shrink: 1;
     margin: 20px;
     width: auto;
-
 }
 
 .table2 {
+
     flex-shrink: 1;
     margin: 20px;
     width: auto;
+
 }
 .tables {
+
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-around;
@@ -46,4 +47,7 @@ body {
 }
 .last th{
     background-color:#f74251;
+}
+.all {
+    position: absolute;
 }
