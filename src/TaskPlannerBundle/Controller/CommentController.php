@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use TaskPlannerBundle\Entity\Task;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Comment controller.
@@ -57,5 +59,41 @@ class CommentController extends Controller
                 ));
      
     }
-    
+    /**
+     * @Route("/{id}/deleteCom", name="deleteCom")
+     * 
+     */
+    public function deleteComAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $comment = $this->getDoctrine()->getRepository('TaskPlannerBundle:Comment')->find($id);
+        
+        $task = $comment->getTask();
+               
+        $qb = $em->createQueryBuilder();
+        $query = $qb->delete('TaskPlannerBundle:Comment', 'comment')
+            ->where('comment.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery();
+        $query->execute();
+        $request->getSession()
+                ->getFlashBag()
+                ->add('success', 'Comment Deleted!');
+        
+        $comment = new Comment();
+                        
+        $form = $this->createFormBuilder($comment)
+                ->setAction($this->generateUrl('addComm', ['id'=>$id]))
+                ->setMethod('POST')
+                ->add('text', 'textarea', array(
+                    'attr'=>array('cols'=>20, 'rows'=>5)))
+                ->add('save', 'submit')
+                ->getForm();
+                
+        $comments = $task->getComments();
+        
+        
+        return $this->redirectToRoute('taskList');
+    }
 }

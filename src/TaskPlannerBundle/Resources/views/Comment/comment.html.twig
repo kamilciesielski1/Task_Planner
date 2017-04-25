@@ -37,11 +37,13 @@
         <tr>
             <th>Id</th>
             <th>Comment</th>
+            <th>Delete:</th>
         </tr>
         {% for comment in comments %}
         <tr>
             <td>{{ loop.index }}</td>
             <td>{{comment.text}}</td>
+            <td><a class="btn btn-default" href="{{ url('deleteCom', {'id':comment.id})}}">Delete</a></td>
         </tr>
         {% endfor %}
     </table>
